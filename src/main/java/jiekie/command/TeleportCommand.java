@@ -1,0 +1,193 @@
+package jiekie.command;
+
+import jiekie.TeleportPlugin;
+import jiekie.util.ChatUtil;
+import jiekie.util.GuiUtil;
+import jiekie.util.SoundUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
+
+public class TeleportCommand implements CommandExecutor {
+    private final TeleportPlugin plugin;
+
+    public TeleportCommand(TeleportPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(!(sender instanceof Player)) {
+            ChatUtil.notPlayer(sender);
+            return true;
+        }
+
+        Player player = (Player) sender;
+        if(!player.isOp()) {
+            ChatUtil.notOp(player);
+            return true;
+        }
+
+        if(args == null || args.length == 0) {
+            ChatUtil.commandHelper(player);
+            return true;
+        }
+
+        switch (args[0]) {
+            case "나침반":
+                getCompass(player);
+                break;
+
+            case "설정":
+                setLocation(player, args);
+                break;
+
+            case "제거":
+                removeLocation(player, args);
+                break;
+
+            case "이동":
+                move(player, args);
+                break;
+
+            case "도움말":
+                ChatUtil.commandList(player);
+                break;
+
+            default:
+                ChatUtil.commandHelper(player);
+                break;
+        }
+
+        return true;
+    }
+
+    /* 나침반 */
+    public void getCompass(Player player) {
+        // 인벤토리 부족
+        PlayerInventory inventory = player.getInventory();
+        if(inventory.firstEmpty() == -1) {
+            ChatUtil.inventoryFull(player);
+            return;
+        }
+
+        // 나침반 생성
+        ItemStack compass = new ItemStack(Material.COMPASS);
+        ItemMeta meta = compass.getItemMeta();
+
+        meta.setDisplayName(GuiUtil.COMPASS_NAME);
+        meta.addEnchant(Enchantment.LUCK, 1, true);
+        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+        compass.setItemMeta(meta);
+        
+        // 나침반 지급
+        inventory.addItem(compass);
+        ChatUtil.getCompass(player);
+        SoundUtil.playNoteBlockBell(player);
+    }
+
+    /* 설정 */
+    public void setLocation(Player player, String[] args) {
+        if(args.length != 5 && args.length != 7) {
+            player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 설정 장소명 x y z [yaw] [pitch])");
+            return;
+        }
+
+        try {
+            String name = args[1];
+            World world = player.getWorld();
+            int x = Integer.parseInt(args[2]);
+            int y = Integer.parseInt(args[3]);
+            int z = Integer.parseInt(args[4]);
+            int yaw = 0;
+            int pitch = 0;
+
+            if(args.length == 7) {
+                yaw = Integer.parseInt(args[5]);
+                pitch = Integer.parseInt(args[6]);
+            }
+
+            if(plugin.getLocationManager().exists(name))
+                ChatUtil.locationIsChanged(player);
+            else
+                ChatUtil.locationIsSaved(player);
+
+            SoundUtil.playNoteBlockBell(player);
+
+            Location location = new Location(world, x, y, z, yaw, pitch);
+            plugin.getLocationManager().setLocation(name, location);
+
+
+        } catch (NumberFormatException e) {
+            ChatUtil.coordinatesNotNumber(player);
+        }
+    }
+
+    /* 제거 */
+    public void removeLocation(Player player, String[] args) {
+        if(args.length < 2) {
+            player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 제거 장소명)");
+            return;
+        }
+
+        // 장소 정보 없음
+        String name = args[1];
+        if(!plugin.getLocationManager().exists(name)) {
+            ChatUtil.isNotRegisteredLocation(player);
+            return;
+        }
+
+        // 장소 정보 제거
+        plugin.getLocationManager().removeLocation(name);
+        ChatUtil.locationIsRemoved(player);
+        SoundUtil.playNoteBlockBell(player);
+    }
+
+    /* 이동 */
+    public void move(Player player, String[] args) {
+        if(args.length < 2) {
+            player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 이동 장소명 [플레이어ID])");
+            return;
+        }
+
+        // 장소 정보 없음
+        String name = args[1];
+        if(!plugin.getLocationManager().exists(name)) {
+            ChatUtil.isNotRegisteredLocation(player);
+            return;
+        }
+
+        // 장소로 이동
+        Location location = plugin.getLocationManager().getLocation(name);
+        if(args.length == 2) {
+            player.teleport(location);
+            SoundUtil.playTeleport(player);
+            return;
+        }
+
+        // 플레이어 텔레포트
+        String targetPlayerName = args[2];
+        Player targetPlayer = Bukkit.getPlayerExact(targetPlayerName);
+        if(targetPlayer == null) {
+            ChatUtil.playerDoesNotExist(player);
+            return;
+        }
+
+        targetPlayer.teleport(location);
+        SoundUtil.playTeleport(targetPlayer);
+
+        ChatUtil.movePlayerToWorld(player);
+        SoundUtil.playNoteBlockBell(player);
+    }
+}
