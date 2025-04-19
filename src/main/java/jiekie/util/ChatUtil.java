@@ -71,7 +71,7 @@ public class ChatUtil {
         player.sendMessage(ChatColor.GRAY + "　　　　　: 장소 정보를 제거합니다.");
         player.sendMessage("　　　④ /텔레포트 이동 장소명");
         player.sendMessage(ChatColor.GRAY + "　　　　　: 입력한 장소로 이동합니다.");
-        player.sendMessage("　　　⑤ /텔레포트 이동 장소명 플레이어ID");
+        player.sendMessage("　　　⑤ /텔레포트 이동 장소명 플레이어ID|닉네임");
         player.sendMessage(ChatColor.GRAY + "　　　　　: 플레이어를 입력한 장소로 이동합니다.");
         player.sendMessage("　　　⑥ /텔레포트 도움말");
         player.sendMessage(ChatColor.GRAY + "　　　　　: 사용 가능한 명령어를 확인할 수 있습니다.");

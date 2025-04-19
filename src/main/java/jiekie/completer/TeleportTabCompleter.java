@@ -1,6 +1,7 @@
 package jiekie.completer;
 
 import jiekie.TeleportPlugin;
+import jiekie.api.NicknameAPI;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -37,7 +38,7 @@ public class TeleportTabCompleter implements TabCompleter {
         }
 
         if(args.length == 3 && args[0].equals("이동"))
-            return Bukkit.getOnlinePlayers().stream().map(Player::getName).toList();
+            return NicknameAPI.getInstance().getPlayerNameAndNicknameList();
 
         if(args.length == 3 && args[0].equals("설정")) {
             if(targetBlock != null)

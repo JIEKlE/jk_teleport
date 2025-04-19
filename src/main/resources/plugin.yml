@@ -4,6 +4,7 @@ main: jiekie.TeleportPlugin
 api-version: '1.20'
 authors: [Jiekie]
 description: 텔레포트 플러그인
+depend: [jk_nickname]
 commands:
   텔레포트:
     description: 텔레포트 관련 명령어

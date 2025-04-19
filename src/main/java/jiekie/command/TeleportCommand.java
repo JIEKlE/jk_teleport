@@ -1,6 +1,7 @@
 package jiekie.command;
 
 import jiekie.TeleportPlugin;
+import jiekie.api.NicknameAPI;
 import jiekie.util.ChatUtil;
 import jiekie.util.GuiUtil;
 import jiekie.util.SoundUtil;
@@ -128,7 +129,6 @@ public class TeleportCommand implements CommandExecutor {
             Location location = new Location(world, x, y, z, yaw, pitch);
             plugin.getLocationManager().setLocation(name, location);
 
-
         } catch (NumberFormatException e) {
             ChatUtil.coordinatesNotNumber(player);
         }
@@ -157,7 +157,7 @@ public class TeleportCommand implements CommandExecutor {
     /* 이동 */
     public void move(Player player, String[] args) {
         if(args.length < 2) {
-            player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 이동 장소명 [플레이어ID])");
+            player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 이동 장소명 [플레이어ID|닉네임])");
             return;
         }
 
@@ -178,7 +178,7 @@ public class TeleportCommand implements CommandExecutor {
 
         // 플레이어 텔레포트
         String targetPlayerName = args[2];
-        Player targetPlayer = Bukkit.getPlayerExact(targetPlayerName);
+        Player targetPlayer = NicknameAPI.getInstance().getPlayerByNameOrNickname(targetPlayerName);
         if(targetPlayer == null) {
             ChatUtil.playerDoesNotExist(player);
             return;
