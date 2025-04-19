@@ -25,6 +25,7 @@ public class TeleportTabCompleter implements TabCompleter {
     @Nullable
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if(!sender.hasPermission("jk.teleport.command")) return Collections.emptyList();
         if(!(sender instanceof Player)) return Collections.emptyList();
         Player player = (Player) sender;
         Block targetBlock = player.getTargetBlockExact(10);

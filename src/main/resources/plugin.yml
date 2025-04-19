@@ -10,3 +10,5 @@ commands:
     description: 텔레포트 관련 명령어
     usage: /텔레포트
     tab-completer: jiekie.completer.TeleportTabCompleter
+    permission: jk.teleport.command
+    permission-message: ''
