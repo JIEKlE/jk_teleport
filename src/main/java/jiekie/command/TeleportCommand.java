@@ -28,45 +28,39 @@ public class TeleportCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(!(sender instanceof Player)) {
-            ChatUtil.notPlayer(sender);
-            return true;
-        }
-
-        Player player = (Player) sender;
-        if(!player.isOp()) {
-            ChatUtil.notOp(player);
+        if(sender instanceof Player && !sender.isOp()) {
+            ChatUtil.notOp(sender);
             return true;
         }
 
         if(args == null || args.length == 0) {
-            ChatUtil.commandHelper(player);
+            ChatUtil.commandHelper(sender);
             return true;
         }
 
         switch (args[0]) {
             case "나침반":
-                getCompass(player);
+                getCompass(sender);
                 break;
 
             case "설정":
-                setLocation(player, args);
+                setLocation(sender, args);
                 break;
 
             case "제거":
-                removeLocation(player, args);
+                removeLocation(sender, args);
                 break;
 
             case "이동":
-                move(player, args);
+                move(sender, args);
                 break;
 
             case "도움말":
-                ChatUtil.commandList(player);
+                ChatUtil.commandList(sender);
                 break;
 
             default:
-                ChatUtil.commandHelper(player);
+                ChatUtil.commandHelper(sender);
                 break;
         }
 
@@ -74,8 +68,14 @@ public class TeleportCommand implements CommandExecutor {
     }
 
     /* 나침반 */
-    public void getCompass(Player player) {
+    public void getCompass(CommandSender sender) {
+        if(!(sender instanceof Player)) {
+            ChatUtil.notPlayer(sender);
+            return;
+        }
+
         // 인벤토리 부족
+        Player player = (Player) sender;
         PlayerInventory inventory = player.getInventory();
         if(inventory.firstEmpty() == -1) {
             ChatUtil.inventoryFull(player);
@@ -98,7 +98,13 @@ public class TeleportCommand implements CommandExecutor {
     }
 
     /* 설정 */
-    public void setLocation(Player player, String[] args) {
+    public void setLocation(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player)) {
+            ChatUtil.notPlayer(sender);
+            return;
+        }
+
+        Player player = (Player) sender;
         if(args.length != 5 && args.length != 7) {
             player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 설정 장소명 x y z [yaw] [pitch])");
             return;
@@ -134,7 +140,13 @@ public class TeleportCommand implements CommandExecutor {
     }
 
     /* 제거 */
-    public void removeLocation(Player player, String[] args) {
+    public void removeLocation(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player)) {
+            ChatUtil.notPlayer(sender);
+            return;
+        }
+
+        Player player = (Player) sender;
         if(args.length < 2) {
             player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 제거 장소명)");
             return;
@@ -154,22 +166,28 @@ public class TeleportCommand implements CommandExecutor {
     }
 
     /* 이동 */
-    public void move(Player player, String[] args) {
+    public void move(CommandSender sender, String[] args) {
         if(args.length < 2) {
-            player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 이동 장소명 [플레이어ID|닉네임])");
+            sender.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 이동 장소명 [플레이어ID|닉네임])");
             return;
         }
 
         // 장소 정보 없음
         String name = args[1];
         if(!plugin.getLocationManager().exists(name)) {
-            ChatUtil.isNotRegisteredLocation(player);
+            ChatUtil.isNotRegisteredLocation(sender);
             return;
         }
 
         // 장소로 이동
         Location location = plugin.getLocationManager().getLocation(name);
         if(args.length == 2) {
+            if(!(sender instanceof Player)) {
+                ChatUtil.notPlayer(sender);
+                return;
+            }
+
+            Player player = (Player) sender;
             player.teleport(location);
             SoundUtil.playTeleport(player);
             return;
@@ -179,14 +197,15 @@ public class TeleportCommand implements CommandExecutor {
         String targetPlayerName = args[2];
         Player targetPlayer = NicknameAPI.getInstance().getPlayerByNameOrNickname(targetPlayerName);
         if(targetPlayer == null) {
-            ChatUtil.playerDoesNotExist(player);
+            ChatUtil.playerDoesNotExist(sender);
             return;
         }
 
         targetPlayer.teleport(location);
         SoundUtil.playTeleport(targetPlayer);
 
-        ChatUtil.movePlayerToWorld(player);
-        SoundUtil.playNoteBlockBell(player);
+        ChatUtil.movePlayerToWorld(sender);
+        if(sender instanceof Player)
+            SoundUtil.playNoteBlockBell((Player) sender);
     }
 }
