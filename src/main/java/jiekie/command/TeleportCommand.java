@@ -5,6 +5,7 @@ import jiekie.api.NicknameAPI;
 import jiekie.util.ChatUtil;
 import jiekie.util.GuiUtil;
 import jiekie.util.SoundUtil;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -194,7 +195,7 @@ public class TeleportCommand implements CommandExecutor {
         }
 
         // 플레이어 텔레포트
-        String targetPlayerName = args[2];
+        String targetPlayerName = getContents(args, 2);
         Player targetPlayer = NicknameAPI.getInstance().getPlayerByNameOrNickname(targetPlayerName);
         if(targetPlayer == null) {
             ChatUtil.playerDoesNotExist(sender);
@@ -207,5 +208,17 @@ public class TeleportCommand implements CommandExecutor {
         ChatUtil.movePlayerToWorld(sender);
         if(sender instanceof Player)
             SoundUtil.playNoteBlockBell((Player) sender);
+    }
+
+    private String getContents(String[] args, int startIndex) {
+        StringBuffer sb = new StringBuffer();
+        for(int i = startIndex ; i < args.length ; i++) {
+            if(i != startIndex)
+                sb.append(" ");
+            sb.append(args[i]);
+        }
+
+        String contents = sb.toString();
+        return ChatColor.translateAlternateColorCodes('&', contents);
     }
 }
