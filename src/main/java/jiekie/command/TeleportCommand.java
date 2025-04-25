@@ -35,7 +35,7 @@ public class TeleportCommand implements CommandExecutor {
         }
 
         if(args == null || args.length == 0) {
-            ChatUtil.commandHelper(sender);
+            ChatUtil.teleportCommandHelper(sender);
             return true;
         }
 
@@ -57,11 +57,11 @@ public class TeleportCommand implements CommandExecutor {
                 break;
 
             case "도움말":
-                ChatUtil.commandList(sender);
+                ChatUtil.teleportCommandList(sender);
                 break;
 
             default:
-                ChatUtil.commandHelper(sender);
+                ChatUtil.teleportCommandHelper(sender);
                 break;
         }
 
@@ -205,9 +205,10 @@ public class TeleportCommand implements CommandExecutor {
         targetPlayer.teleport(location);
         SoundUtil.playTeleport(targetPlayer);
 
-        ChatUtil.movePlayerToWorld(sender);
-        if(sender instanceof Player)
+        if(sender instanceof Player) {
+            ChatUtil.movePlayerToWorld(sender);
             SoundUtil.playNoteBlockBell((Player) sender);
+        }
     }
 
     private String getContents(String[] args, int startIndex) {

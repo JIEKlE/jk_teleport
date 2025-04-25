@@ -2,7 +2,6 @@ package jiekie.completer;
 
 import jiekie.TeleportPlugin;
 import jiekie.api.NicknameAPI;
-import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

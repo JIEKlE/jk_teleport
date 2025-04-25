@@ -14,3 +14,9 @@ commands:
     tab-completer: jiekie.completer.TeleportTabCompleter
     permission: jk.teleport.command
     permission-message: ''
+  이동권:
+    description: 이동권 관련 명령어
+    usage: /이동권
+    tab-completer: jiekie.completer.WarpTicketTabCompleter
+    permission: jk.warp_ticket.command
+    permission-message: ''
