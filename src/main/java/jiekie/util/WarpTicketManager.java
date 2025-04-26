@@ -52,6 +52,10 @@ public class WarpTicketManager {
         ItemStack template = item.clone();
         template.setAmount(1);
 
+        ItemMeta templateMeta = template.getItemMeta();
+        templateMeta.setLore(warpTicketLore);
+        template.setItemMeta(templateMeta);
+
         warpTicketMap.put(name, template);
     }
 
@@ -64,7 +68,6 @@ public class WarpTicketManager {
 
         ItemMeta meta = warpTicket.getItemMeta();
         meta.setDisplayName(ChatColor.WHITE + locationName + " 이동권");
-        meta.setLore(warpTicketLore);
         warpTicket.setItemMeta(meta);
 
         return warpTicket;

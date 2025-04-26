@@ -1,9 +1,13 @@
 jiekie\completer\TeleportTabCompleter.class
-jiekie\event\GuiEvent.class
-jiekie\command\TeleportCommand.class
-jiekie\event\PlayerEvent.class
+jiekie\completer\WarpTicketTabCompleter.class
 jiekie\util\ChatUtil.class
-jiekie\TeleportPlugin.class
 jiekie\util\LocationManager.class
 jiekie\util\GuiUtil.class
+jiekie\util\LocationData.class
 jiekie\util\SoundUtil.class
+jiekie\event\GuiEvent.class
+jiekie\command\TeleportCommand.class
+jiekie\command\WarpTicketCommand.class
+jiekie\event\PlayerEvent.class
+jiekie\TeleportPlugin.class
+jiekie\util\WarpTicketManager.class
