@@ -2,7 +2,7 @@ package jiekie.command;
 
 import jiekie.TeleportPlugin;
 import jiekie.util.ChatUtil;
-import jiekie.util.LocationManager;
+import jiekie.manager.LocationManager;
 import jiekie.util.SoundUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
