@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +43,15 @@ public class LocationManager {
             Location location = new Location(world, x, y, z, yaw, pitch);
             LocationData locationData = new LocationData(name, location, templateName);
             locationMap.put(name, locationData);
+
+            String englishPermission = config.getString(path + ".english_permission", null);
+            String koreanPermission = config.getString(path + ".korean_permission", null);
+            setPermission(name, englishPermission, koreanPermission);
         }
+    }
+
+    public LocationData getLocationData(String name) {
+        return locationMap.get(name);
     }
 
     public Location getLocation(String name) {
@@ -63,8 +72,34 @@ public class LocationManager {
         }
     }
 
+    public void setPermission(String name, String englishPermission, String koreanPermission) {
+        locationMap.get(name).setEnglishPermission(englishPermission);
+        locationMap.get(name).setKoreanPermission(koreanPermission);
+    }
+
+    public boolean playerHasPermission(String name, Player player) {
+        LocationData locationData = locationMap.get(name);
+        String englishPermission = locationData.getEnglishPermission();
+        if(englishPermission == null) return true;
+        return player.hasPermission(englishPermission);
+    }
+
+    public String getPermissionName(String name) {
+        LocationData locationData = locationMap.get(name);
+        return locationData.getKoreanPermission() == null ? locationData.getEnglishPermission() : locationData.getKoreanPermission();
+    }
+
     public void setTemplateNameForLocation(String name, String templateName) {
         locationMap.get(name).setTemplateName(templateName);
+    }
+
+    public void resetTemplate(String templateName) {
+        for(LocationData locationData : locationMap.values()) {
+            String locationTemplateName = locationData.getTemplateName();
+            if(locationTemplateName == null || locationTemplateName.isBlank()) continue;
+            if(locationTemplateName.equals(templateName))
+                locationData.setTemplateName(null);
+        }
     }
 
     public String getTemplateNameForLocation(String name) {
@@ -73,6 +108,10 @@ public class LocationManager {
 
     public void removeLocation(String name) {
         locationMap.remove(name);
+    }
+
+    public List<String> getAllLocationNames() {
+        return new ArrayList<>(locationMap.keySet());
     }
 
     public void saveLocations() {
@@ -92,12 +131,10 @@ public class LocationManager {
             config.set(path + ".yaw", location.getYaw());
             config.set(path + ".pitch", location.getPitch());
             config.set(path + ".template_name", locationData.getTemplateName());
+            config.set(path + ".english_permission", locationData.getEnglishPermission());
+            config.set(path + ".korean_permission", locationData.getKoreanPermission());
         }
 
         plugin.saveConfig();
-    }
-
-    public List<String> getAllLocationNames() {
-        return new ArrayList<>(locationMap.keySet());
     }
 }

@@ -2,6 +2,8 @@ package jiekie.command;
 
 import jiekie.TeleportPlugin;
 import jiekie.api.NicknameAPI;
+import jiekie.manager.LocationManager;
+import jiekie.model.LocationData;
 import jiekie.util.ChatUtil;
 import jiekie.util.GuiUtil;
 import jiekie.util.SoundUtil;
@@ -44,16 +46,24 @@ public class TeleportCommand implements CommandExecutor {
                 getCompass(sender);
                 break;
 
-            case "설정":
+            case "장소설정":
                 setLocation(sender, args);
                 break;
 
-            case "제거":
+            case "권한설정":
+                setPermission(sender, args);
+                break;
+
+            case "장소제거":
                 removeLocation(sender, args);
                 break;
 
             case "이동":
                 move(sender, args);
+                break;
+
+            case "정보":
+                showLocationInfo(sender, args);
                 break;
 
             case "도움말":
@@ -70,13 +80,12 @@ public class TeleportCommand implements CommandExecutor {
 
     /* 나침반 */
     public void getCompass(CommandSender sender) {
-        if(!(sender instanceof Player)) {
+        if(!(sender instanceof Player player)) {
             ChatUtil.notPlayer(sender);
             return;
         }
 
         // 인벤토리 부족
-        Player player = (Player) sender;
         PlayerInventory inventory = player.getInventory();
         if(inventory.firstEmpty() == -1) {
             ChatUtil.inventoryFull(player);
@@ -98,14 +107,13 @@ public class TeleportCommand implements CommandExecutor {
         SoundUtil.playNoteBlockBell(player);
     }
 
-    /* 설정 */
+    /* 장소 설정 */
     public void setLocation(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)) {
+        if(!(sender instanceof Player player)) {
             ChatUtil.notPlayer(sender);
             return;
         }
 
-        Player player = (Player) sender;
         if(args.length != 5 && args.length != 7) {
             player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 설정 장소명 x y z [yaw] [pitch])");
             return;
@@ -140,14 +148,46 @@ public class TeleportCommand implements CommandExecutor {
         }
     }
 
-    /* 제거 */
-    public void removeLocation(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)) {
+    /* 권한 설정 */
+    public void setPermission(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player player)) {
             ChatUtil.notPlayer(sender);
             return;
         }
 
-        Player player = (Player) sender;
+        if(args.length < 2) {
+            player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 권한설정 장소명 영어권한명 한글권한명)");
+            return;
+        }
+
+        // 장소 정보 없음
+        String name = args[1];
+        if(!plugin.getLocationManager().exists(name)) {
+            ChatUtil.isNotRegisteredLocation(player);
+            return;
+        }
+
+        // 권한 설정
+        boolean setPermission = args.length >= 4;
+        String englishPermission = args.length >= 4 ? args[2] : null;
+        String koreanPermission = args.length >= 4 ? args[3] : null;
+        plugin.getLocationManager().setPermission(name, englishPermission, koreanPermission);
+
+        if(setPermission)
+            ChatUtil.setPermission(player);
+        else
+            ChatUtil.resetPermission(player);
+        
+        SoundUtil.playNoteBlockBell(player);
+    }
+
+    /* 장소 제거 */
+    public void removeLocation(CommandSender sender, String[] args) {
+        if(!(sender instanceof Player player)) {
+            ChatUtil.notPlayer(sender);
+            return;
+        }
+
         if(args.length < 2) {
             player.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 제거 장소명)");
             return;
@@ -180,29 +220,34 @@ public class TeleportCommand implements CommandExecutor {
             return;
         }
 
-        // 장소로 이동
-        Location location = plugin.getLocationManager().getLocation(name);
+        // 이동 대상 설정
+        Player targetPlayer;
         if(args.length == 2) {
-            if(!(sender instanceof Player)) {
+            if(!(sender instanceof Player player)) {
                 ChatUtil.notPlayer(sender);
                 return;
             }
 
-            Player player = (Player) sender;
-            player.teleport(location);
-            SoundUtil.playTeleport(player);
+            targetPlayer = player;
+
+        } else {
+            targetPlayer = NicknameAPI.getInstance().getPlayerByNameOrNickname(getContents(args, 2));
+
+            if(targetPlayer == null) {
+                ChatUtil.playerDoesNotExist(sender);
+                return;
+            }
+        }
+
+        // 권한 체크
+        LocationManager locationManager = plugin.getLocationManager();
+        if(!locationManager.playerHasPermission(name, targetPlayer)) {
+            ChatUtil.noPermission(targetPlayer, locationManager.getPermissionName(name));
             return;
         }
 
-        // 플레이어 텔레포트
-        String targetPlayerName = getContents(args, 2);
-        Player targetPlayer = NicknameAPI.getInstance().getPlayerByNameOrNickname(targetPlayerName);
-        if(targetPlayer == null) {
-            ChatUtil.playerDoesNotExist(sender);
-            return;
-        }
-
-        targetPlayer.teleport(location);
+        // 텔레포트
+        targetPlayer.teleport(locationManager.getLocation(name));
         SoundUtil.playTeleport(targetPlayer);
 
         if(sender instanceof Player) {
@@ -211,8 +256,31 @@ public class TeleportCommand implements CommandExecutor {
         }
     }
 
+    /* 정보 */
+    private void showLocationInfo(CommandSender sender, String[] args) {
+        if(args.length < 2) {
+            sender.sendMessage(ChatUtil.wrongCommand() + " (/텔레포트 정보 장소명)");
+            return;
+        }
+
+        // 장소 정보 없음
+        String name = args[1];
+        if(!plugin.getLocationManager().exists(name)) {
+            ChatUtil.isNotRegisteredLocation(sender);
+            return;
+        }
+
+        LocationData locationData = plugin.getLocationManager().getLocationData(name);
+        ChatUtil.locationInfoPrefix(sender);
+        ChatUtil.locationInfo(sender, locationData);
+        ChatUtil.horizontalLineSuffix(sender);
+
+        if(sender instanceof Player)
+            SoundUtil.playNoteBlockBell((Player) sender);
+    }
+
     private String getContents(String[] args, int startIndex) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for(int i = startIndex ; i < args.length ; i++) {
             if(i != startIndex)
                 sb.append(" ");

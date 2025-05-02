@@ -24,12 +24,17 @@ public class WarpTicketTabCompleter implements TabCompleter {
         if(!(sender instanceof Player)) return Collections.emptyList();
 
         if(args.length == 1)
-            return Arrays.asList("템플릿", "등록", "받기", "도움말");
+            return Arrays.asList("템플릿등록", "템플릿제거", "등록", "해제", "받기", "도움말");
 
-        if(args.length == 2 && (args[0].equals("등록") || args[0].equals("받기")))
-            return plugin.getLocationManager().getAllLocationNames();
+        String commandType = args[0];
+        if(args.length == 2) {
+            if((commandType.equals("등록") || commandType.equals("해제")) || commandType.equals("받기"))
+                return plugin.getLocationManager().getAllLocationNames();
+            if(commandType.equals("템플릿제거"))
+                return plugin.getWarpTicketManager().getTemplateNames();
+        }
 
-        if(args.length == 3 && args[0].equals("등록"))
+        if(args.length == 3 && commandType.equals("등록"))
             return plugin.getWarpTicketManager().getTemplateNames();
 
         return Collections.emptyList();

@@ -22,12 +22,11 @@ public class WarpTicketCommand implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
-        if(!(sender instanceof Player)) {
+        if(!(sender instanceof Player player)) {
             ChatUtil.notPlayer(sender);
             return true;
         }
 
-        Player player = (Player) sender;
         if(!player.isOp()) {
             ChatUtil.notOp(player);
             return true;
@@ -39,12 +38,20 @@ public class WarpTicketCommand implements CommandExecutor {
         }
 
         switch (args[0]) {
-            case "템플릿":
+            case "템플릿등록":
                 registerTemplate(player, args);
+                break;
+
+            case "템플릿제거":
+                removeTemplate(player, args);
                 break;
 
             case "등록":
                 registerWarpTicket(player, args);
+                break;
+
+            case "해제":
+                resetWarpTicket(player, args);
                 break;
 
             case "받기":
@@ -65,13 +72,13 @@ public class WarpTicketCommand implements CommandExecutor {
 
     private void registerTemplate(Player player, String[] args) {
         if(args.length < 2) {
-            player.sendMessage(ChatUtil.wrongCommand() + " (/이동권 템플릿 템플릿명)");
+            player.sendMessage(ChatUtil.wrongCommand() + " (/이동권 템플릿등록 템플릿명)");
             return;
         }
 
         PlayerInventory inventory = player.getInventory();
         ItemStack template = inventory.getItemInMainHand();
-        if(template == null || template.getType() == Material.AIR) {
+        if(template.getType() == Material.AIR) {
             ChatUtil.noItemInHand(player);
             return;
         }
@@ -79,6 +86,24 @@ public class WarpTicketCommand implements CommandExecutor {
         plugin.getWarpTicketManager().registerTemplate(args[1], template);
 
         ChatUtil.registerTemplate(player);
+        SoundUtil.playNoteBlockBell(player);
+    }
+
+    private void removeTemplate(Player player, String[] args) {
+        if(args.length < 2) {
+            player.sendMessage(ChatUtil.wrongCommand() + " (/이동권 템플릿제거 템플릿명)");
+            return;
+        }
+
+        String templateName = args[1];
+        if(!plugin.getWarpTicketManager().existTemplate(templateName)) {
+            ChatUtil.templateNotRegistered(player);
+            return;
+        }
+
+        plugin.getWarpTicketManager().removeTemplate(templateName);
+
+        ChatUtil.removeTemplate(player);
         SoundUtil.playNoteBlockBell(player);
     }
 
@@ -104,6 +129,31 @@ public class WarpTicketCommand implements CommandExecutor {
         locationManager.setTemplateNameForLocation(locationName, templateName);
 
         ChatUtil.registerWarpTicket(player, locationName);
+        SoundUtil.playNoteBlockBell(player);
+    }
+
+    private void resetWarpTicket(Player player, String[] args) {
+        if(args.length < 2) {
+            player.sendMessage(ChatUtil.wrongCommand() + " (/이동권 해제 장소명)");
+            return;
+        }
+
+        LocationManager locationManager = plugin.getLocationManager();
+        String locationName = args[1];
+        if(!locationManager.exists(locationName)) {
+            ChatUtil.isNotRegisteredLocation(player);
+            return;
+        }
+
+        String templateName = locationManager.getTemplateNameForLocation(locationName);
+        if(templateName == null) {
+            ChatUtil.WarpTicketNotRegistered(player);
+            return;
+        }
+
+        locationManager.setTemplateNameForLocation(locationName, null);
+
+        ChatUtil.resetWarpTicket(player, locationName);
         SoundUtil.playNoteBlockBell(player);
     }
 

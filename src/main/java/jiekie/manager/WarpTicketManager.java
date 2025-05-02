@@ -41,7 +41,6 @@ public class WarpTicketManager {
                 warpTicketMap.put(name, itemFromBase64(encodedItem));
 
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
                 plugin.getLogger().info("이동권 아이템 불러오기 실패");
             }
         }
@@ -56,6 +55,11 @@ public class WarpTicketManager {
         template.setItemMeta(templateMeta);
 
         warpTicketMap.put(name, template);
+    }
+
+    public void removeTemplate(String name) {
+        warpTicketMap.remove(name);
+        plugin.getLocationManager().resetTemplate(name);
     }
 
     public boolean existTemplate(String name) {
@@ -123,7 +127,6 @@ public class WarpTicketManager {
                 config.set(path, itemStackToBase64(template));
 
             } catch (IOException e) {
-                e.printStackTrace();
                 plugin.getLogger().info("이동권 아이템 저장 실패");
             }
         }

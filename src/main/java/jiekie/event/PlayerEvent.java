@@ -1,6 +1,9 @@
 package jiekie.event;
 
 import jiekie.TeleportPlugin;
+import jiekie.manager.LocationManager;
+import jiekie.model.LocationData;
+import jiekie.util.ChatUtil;
 import jiekie.util.GuiUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -67,6 +70,12 @@ public class PlayerEvent implements Listener {
         if(!plugin.getWarpTicketManager().compareItem(item)) return;
         String displayName = item.getItemMeta().getDisplayName();
         String locationName = displayName.replace(ChatColor.WHITE + "", "").replace(" 이동권", "");
+
+        LocationManager locationManager = plugin.getLocationManager();
+        if(!locationManager.playerHasPermission(locationName, player)) {
+            ChatUtil.noPermission(player, locationManager.getPermissionName(locationName));
+            return;
+        }
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "텔레포트 이동 " + locationName + " " + player.getName());
 

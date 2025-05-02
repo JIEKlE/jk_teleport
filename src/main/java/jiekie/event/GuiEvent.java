@@ -28,9 +28,8 @@ public class GuiEvent implements Listener {
     /* 나침반 클릭 이벤트 */
     public void onCompassClick(InventoryClickEvent e) {
         HumanEntity entity = e.getWhoClicked();
-        if(!(entity instanceof Player)) return;
+        if(!(entity instanceof Player player)) return;
 
-        Player player = (Player) entity;
         String title = e.getView().getTitle();
         if(!title.equals(GuiUtil.CHEST_NAME)) return;
 
