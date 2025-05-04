@@ -79,13 +79,13 @@ public class WarpTicketCommand implements CommandExecutor {
         PlayerInventory inventory = player.getInventory();
         ItemStack template = inventory.getItemInMainHand();
         if(template.getType() == Material.AIR) {
-            ChatUtil.noItemInHand(player);
+            ChatUtil.showMessage(player, ChatUtil.NO_ITEM);
             return;
         }
 
         plugin.getWarpTicketManager().registerTemplate(args[1], template);
 
-        ChatUtil.registerTemplate(player);
+        ChatUtil.showMessage(player, ChatUtil.REGISTER_TEMPLATE);
         SoundUtil.playNoteBlockBell(player);
     }
 
@@ -97,13 +97,13 @@ public class WarpTicketCommand implements CommandExecutor {
 
         String templateName = args[1];
         if(!plugin.getWarpTicketManager().existTemplate(templateName)) {
-            ChatUtil.templateNotRegistered(player);
+            ChatUtil.showMessage(player, ChatUtil.TEMPLATE_NOT_REGISTERED);
             return;
         }
 
         plugin.getWarpTicketManager().removeTemplate(templateName);
 
-        ChatUtil.removeTemplate(player);
+        ChatUtil.showMessage(player, ChatUtil.REMOVE_TEMPLATE);
         SoundUtil.playNoteBlockBell(player);
     }
 
@@ -116,13 +116,13 @@ public class WarpTicketCommand implements CommandExecutor {
         LocationManager locationManager = plugin.getLocationManager();
         String locationName = args[1];
         if(!locationManager.exists(locationName)) {
-            ChatUtil.isNotRegisteredLocation(player);
+            ChatUtil.showMessage(player, ChatUtil.IS_NOT_REGISTERED_LOCATION);
             return;
         }
 
         String templateName = args[2];
         if(!plugin.getWarpTicketManager().existTemplate(templateName)) {
-            ChatUtil.templateNotRegistered(player);
+            ChatUtil.showMessage(player, ChatUtil.TEMPLATE_NOT_REGISTERED);
             return;
         }
 
@@ -141,13 +141,13 @@ public class WarpTicketCommand implements CommandExecutor {
         LocationManager locationManager = plugin.getLocationManager();
         String locationName = args[1];
         if(!locationManager.exists(locationName)) {
-            ChatUtil.isNotRegisteredLocation(player);
+            ChatUtil.showMessage(player, ChatUtil.IS_NOT_REGISTERED_LOCATION);
             return;
         }
 
         String templateName = locationManager.getTemplateNameForLocation(locationName);
         if(templateName == null) {
-            ChatUtil.WarpTicketNotRegistered(player);
+            ChatUtil.showMessage(player, ChatUtil.WARP_TICKET_NOT_REGISTERED);
             return;
         }
 
@@ -165,27 +165,27 @@ public class WarpTicketCommand implements CommandExecutor {
 
         PlayerInventory inventory = player.getInventory();
         if(inventory.firstEmpty() == -1) {
-            ChatUtil.inventoryFull(player);
+            ChatUtil.showMessage(player, ChatUtil.INVENTORY_FULL);
             return;
         }
 
         LocationManager locationManager = plugin.getLocationManager();
         String locationName = args[1];
         if(!locationManager.exists(locationName)) {
-            ChatUtil.isNotRegisteredLocation(player);
+            ChatUtil.showMessage(player, ChatUtil.IS_NOT_REGISTERED_LOCATION);
             return;
         }
 
         String templateName = locationManager.getTemplateNameForLocation(locationName);
         if(templateName == null) {
-            ChatUtil.WarpTicketNotRegistered(player);
+            ChatUtil.showMessage(player, ChatUtil.WARP_TICKET_NOT_REGISTERED);
             return;
         }
 
         ItemStack warpTicket = plugin.getWarpTicketManager().getWarpTicket(templateName, locationName);
         inventory.addItem(warpTicket);
 
-        ChatUtil.getWarpTicket(player);
+        ChatUtil.showMessage(player, ChatUtil.GET_WARP_TICKET);
         SoundUtil.playNoteBlockBell(player);
     }
 }

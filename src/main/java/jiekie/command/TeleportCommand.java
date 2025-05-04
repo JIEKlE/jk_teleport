@@ -88,7 +88,7 @@ public class TeleportCommand implements CommandExecutor {
         // 인벤토리 부족
         PlayerInventory inventory = player.getInventory();
         if(inventory.firstEmpty() == -1) {
-            ChatUtil.inventoryFull(player);
+            ChatUtil.showMessage(player, ChatUtil.INVENTORY_FULL);
             return;
         }
 
@@ -103,7 +103,7 @@ public class TeleportCommand implements CommandExecutor {
         
         // 나침반 지급
         inventory.addItem(compass);
-        ChatUtil.getCompass(player);
+        ChatUtil.showMessage(player, ChatUtil.GET_COMPASS);
         SoundUtil.playNoteBlockBell(player);
     }
 
@@ -134,9 +134,9 @@ public class TeleportCommand implements CommandExecutor {
             }
 
             if(plugin.getLocationManager().exists(name))
-                ChatUtil.locationIsChanged(player);
+                ChatUtil.showMessage(player, ChatUtil.LOCATION_IS_CHANGED);
             else
-                ChatUtil.locationIsSaved(player);
+                ChatUtil.showMessage(player, ChatUtil.LOCATION_IS_SAVED);
 
             SoundUtil.playNoteBlockBell(player);
 
@@ -144,7 +144,7 @@ public class TeleportCommand implements CommandExecutor {
             plugin.getLocationManager().setLocation(name, location);
 
         } catch (NumberFormatException e) {
-            ChatUtil.coordinatesNotNumber(player);
+            ChatUtil.showMessage(player, ChatUtil.COORDINATES_NOT_NUMBER);
         }
     }
 
@@ -163,7 +163,7 @@ public class TeleportCommand implements CommandExecutor {
         // 장소 정보 없음
         String name = args[1];
         if(!plugin.getLocationManager().exists(name)) {
-            ChatUtil.isNotRegisteredLocation(player);
+            ChatUtil.showMessage(player, ChatUtil.IS_NOT_REGISTERED_LOCATION);
             return;
         }
 
@@ -174,9 +174,9 @@ public class TeleportCommand implements CommandExecutor {
         plugin.getLocationManager().setPermission(name, englishPermission, koreanPermission);
 
         if(setPermission)
-            ChatUtil.setPermission(player);
+            ChatUtil.showMessage(player, ChatUtil.SET_PERMISSION);
         else
-            ChatUtil.resetPermission(player);
+            ChatUtil.showMessage(player, ChatUtil.RESET_PERMISSION);
         
         SoundUtil.playNoteBlockBell(player);
     }
@@ -196,13 +196,13 @@ public class TeleportCommand implements CommandExecutor {
         // 장소 정보 없음
         String name = args[1];
         if(!plugin.getLocationManager().exists(name)) {
-            ChatUtil.isNotRegisteredLocation(player);
+            ChatUtil.showMessage(player, ChatUtil.IS_NOT_REGISTERED_LOCATION);
             return;
         }
 
         // 장소 정보 제거
         plugin.getLocationManager().removeLocation(name);
-        ChatUtil.locationIsRemoved(player);
+        ChatUtil.showMessage(player, ChatUtil.LOCATION_IS_REMOVED);
         SoundUtil.playNoteBlockBell(player);
     }
 
@@ -216,7 +216,7 @@ public class TeleportCommand implements CommandExecutor {
         // 장소 정보 없음
         String name = args[1];
         if(!plugin.getLocationManager().exists(name)) {
-            ChatUtil.isNotRegisteredLocation(sender);
+            ChatUtil.showMessage(sender, ChatUtil.IS_NOT_REGISTERED_LOCATION);
             return;
         }
 
@@ -234,7 +234,7 @@ public class TeleportCommand implements CommandExecutor {
             targetPlayer = NicknameAPI.getInstance().getPlayerByNameOrNickname(getContents(args, 2));
 
             if(targetPlayer == null) {
-                ChatUtil.playerDoesNotExist(sender);
+                ChatUtil.showMessage(sender, ChatUtil.PLAYER_DOES_NOT_EXIST);
                 return;
             }
         }
@@ -251,7 +251,7 @@ public class TeleportCommand implements CommandExecutor {
         SoundUtil.playTeleport(targetPlayer);
 
         if(sender instanceof Player) {
-            ChatUtil.movePlayerToWorld(sender);
+            ChatUtil.showMessage(sender, ChatUtil.MOVE_PLAYER_TO_LOCATION);
             SoundUtil.playNoteBlockBell((Player) sender);
         }
     }
@@ -266,7 +266,7 @@ public class TeleportCommand implements CommandExecutor {
         // 장소 정보 없음
         String name = args[1];
         if(!plugin.getLocationManager().exists(name)) {
-            ChatUtil.isNotRegisteredLocation(sender);
+            ChatUtil.showMessage(sender, ChatUtil.IS_NOT_REGISTERED_LOCATION);
             return;
         }
 

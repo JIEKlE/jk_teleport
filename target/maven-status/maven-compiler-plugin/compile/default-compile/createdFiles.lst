@@ -5,6 +5,7 @@ jiekie\manager\WarpTicketManager.class
 jiekie\util\GuiUtil.class
 jiekie\util\SoundUtil.class
 jiekie\model\LocationData.class
+jiekie\util\DirectionUtil.class
 jiekie\event\GuiEvent.class
 jiekie\command\TeleportCommand.class
 jiekie\command\WarpTicketCommand.class
