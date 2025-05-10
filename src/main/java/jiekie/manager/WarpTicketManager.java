@@ -87,7 +87,7 @@ public class WarpTicketManager {
 
         String itemName = itemMeta.getDisplayName();
         if(!itemName.startsWith(ChatColor.WHITE + "")) return false;
-        if(!itemName.endsWith(" 이동권")) return false;
+        if(itemName.indexOf(" 이동권") == -1) return false;
 
         // lore
         if(itemMeta.getLore() == null) return false;

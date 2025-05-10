@@ -69,7 +69,8 @@ public class PlayerEvent implements Listener {
 
         if(!plugin.getWarpTicketManager().compareItem(item)) return;
         String displayName = item.getItemMeta().getDisplayName();
-        String locationName = displayName.replace(ChatColor.WHITE + "", "").replace(" 이동권", "");
+        String locationName = displayName.replace(ChatColor.WHITE + "", "");
+        locationName = locationName.substring(0, locationName.indexOf(" 이동권"));
 
         LocationManager locationManager = plugin.getLocationManager();
         if(!locationManager.playerHasPermission(locationName, player)) {
