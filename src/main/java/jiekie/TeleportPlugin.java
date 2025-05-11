@@ -1,5 +1,6 @@
 package jiekie;
 
+import jiekie.api.TeleportAPI;
 import jiekie.command.TeleportCommand;
 import jiekie.command.WarpTicketCommand;
 import jiekie.completer.TeleportTabCompleter;
@@ -25,17 +26,20 @@ public final class TeleportPlugin extends JavaPlugin {
         warpTicketManager = new WarpTicketManager(this);
         warpTicketManager.load();
 
-        //  이벤트 등록
+        //  event
         getServer().getPluginManager().registerEvents(new PlayerEvent(this), this);
         getServer().getPluginManager().registerEvents(new GuiEvent(this), this);
 
-        // 명령어 등록
+        // command
         getCommand("텔레포트").setExecutor(new TeleportCommand(this));
         getCommand("이동권").setExecutor(new WarpTicketCommand(this));
         
-        // 자동완성 등록
+        // tab completer
         getCommand("텔레포트").setTabCompleter(new TeleportTabCompleter(this));
         getCommand("이동권").setTabCompleter(new WarpTicketTabCompleter(this));
+
+        // api
+        TeleportAPI.initialize(locationManager);
 
         getLogger().info("텔레포트 플러그인 by Jiekie");
         getLogger().info("Copyright © 2025 Jiekie. All rights reserved.");
