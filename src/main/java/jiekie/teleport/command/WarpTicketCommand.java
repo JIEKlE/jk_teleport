@@ -1,9 +1,9 @@
-package jiekie.command;
+package jiekie.teleport.command;
 
-import jiekie.TeleportPlugin;
-import jiekie.util.ChatUtil;
-import jiekie.manager.LocationManager;
-import jiekie.util.SoundUtil;
+import jiekie.teleport.TeleportPlugin;
+import jiekie.teleport.util.ChatUtil;
+import jiekie.teleport.manager.LocationManager;
+import jiekie.teleport.util.SoundUtil;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

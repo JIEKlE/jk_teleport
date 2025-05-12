@@ -1,6 +1,6 @@
-package jiekie.manager;
+package jiekie.teleport.manager;
 
-import jiekie.TeleportPlugin;
+import jiekie.teleport.TeleportPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

@@ -1,14 +1,14 @@
-package jiekie;
+package jiekie.teleport;
 
-import jiekie.api.TeleportAPI;
-import jiekie.command.TeleportCommand;
-import jiekie.command.WarpTicketCommand;
-import jiekie.completer.TeleportTabCompleter;
-import jiekie.completer.WarpTicketTabCompleter;
-import jiekie.event.GuiEvent;
-import jiekie.event.PlayerEvent;
-import jiekie.manager.LocationManager;
-import jiekie.manager.WarpTicketManager;
+import jiekie.teleport.api.TeleportAPI;
+import jiekie.teleport.command.TeleportCommand;
+import jiekie.teleport.command.WarpTicketCommand;
+import jiekie.teleport.completer.TeleportTabCompleter;
+import jiekie.teleport.completer.WarpTicketTabCompleter;
+import jiekie.teleport.event.GuiEvent;
+import jiekie.teleport.event.PlayerEvent;
+import jiekie.teleport.manager.LocationManager;
+import jiekie.teleport.manager.WarpTicketManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class TeleportPlugin extends JavaPlugin {

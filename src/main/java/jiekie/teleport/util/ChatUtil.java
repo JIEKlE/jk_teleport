@@ -1,6 +1,6 @@
-package jiekie.util;
+package jiekie.teleport.util;
 
-import jiekie.model.LocationData;
+import jiekie.teleport.model.LocationData;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;

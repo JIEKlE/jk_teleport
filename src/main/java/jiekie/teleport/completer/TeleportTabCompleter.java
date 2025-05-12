@@ -1,7 +1,7 @@
-package jiekie.completer;
+package jiekie.teleport.completer;
 
-import jiekie.TeleportPlugin;
-import jiekie.api.NicknameAPI;
+import jiekie.nickname.api.NicknameAPI;
+import jiekie.teleport.TeleportPlugin;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

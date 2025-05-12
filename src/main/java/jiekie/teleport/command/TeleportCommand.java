@@ -1,12 +1,12 @@
-package jiekie.command;
+package jiekie.teleport.command;
 
-import jiekie.TeleportPlugin;
-import jiekie.api.NicknameAPI;
-import jiekie.manager.LocationManager;
-import jiekie.model.LocationData;
-import jiekie.util.ChatUtil;
-import jiekie.util.GuiUtil;
-import jiekie.util.SoundUtil;
+import jiekie.nickname.api.NicknameAPI;
+import jiekie.teleport.TeleportPlugin;
+import jiekie.teleport.manager.LocationManager;
+import jiekie.teleport.model.LocationData;
+import jiekie.teleport.util.ChatUtil;
+import jiekie.teleport.util.GuiUtil;
+import jiekie.teleport.util.SoundUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;

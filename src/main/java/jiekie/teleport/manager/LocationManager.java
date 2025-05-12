@@ -1,7 +1,7 @@
-package jiekie.manager;
+package jiekie.teleport.manager;
 
-import jiekie.TeleportPlugin;
-import jiekie.model.LocationData;
+import jiekie.teleport.TeleportPlugin;
+import jiekie.teleport.model.LocationData;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;

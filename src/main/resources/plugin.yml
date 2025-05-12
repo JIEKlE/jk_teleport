@@ -1,6 +1,6 @@
 name: jk_teleport
 version: '${project.version}'
-main: jiekie.TeleportPlugin
+main: jiekie.teleport.TeleportPlugin
 api-version: '1.20'
 authors: [Jiekie]
 description: 텔레포트 플러그인
@@ -11,12 +11,12 @@ commands:
   텔레포트:
     description: 텔레포트 관련 명령어
     usage: /텔레포트
-    tab-completer: jiekie.completer.TeleportTabCompleter
+    tab-completer: jiekie.teleport.completer.TeleportTabCompleter
     permission: jk.teleport.command
     permission-message: ''
   이동권:
     description: 이동권 관련 명령어
     usage: /이동권
-    tab-completer: jiekie.completer.WarpTicketTabCompleter
+    tab-completer: jiekie.teleport.completer.WarpTicketTabCompleter
     permission: jk.warp_ticket.command
     permission-message: ''

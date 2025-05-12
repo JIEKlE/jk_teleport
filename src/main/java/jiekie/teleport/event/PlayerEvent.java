@@ -1,10 +1,9 @@
-package jiekie.event;
+package jiekie.teleport.event;
 
-import jiekie.TeleportPlugin;
-import jiekie.manager.LocationManager;
-import jiekie.model.LocationData;
-import jiekie.util.ChatUtil;
-import jiekie.util.GuiUtil;
+import jiekie.teleport.TeleportPlugin;
+import jiekie.teleport.manager.LocationManager;
+import jiekie.teleport.util.ChatUtil;
+import jiekie.teleport.util.GuiUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;

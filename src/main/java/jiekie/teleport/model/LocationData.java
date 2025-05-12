@@ -1,4 +1,4 @@
-package jiekie.model;
+package jiekie.teleport.model;
 
 import org.bukkit.Location;
 

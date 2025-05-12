@@ -1,4 +1,4 @@
-package jiekie.util;
+package jiekie.teleport.util;
 
 public class DirectionUtil {
     public static String getDirection(float yaw, float pitch) {

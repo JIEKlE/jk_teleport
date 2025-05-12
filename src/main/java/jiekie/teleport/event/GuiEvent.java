@@ -1,8 +1,8 @@
-package jiekie.event;
+package jiekie.teleport.event;
 
-import jiekie.TeleportPlugin;
-import jiekie.util.GuiUtil;
-import jiekie.util.SoundUtil;
+import jiekie.teleport.TeleportPlugin;
+import jiekie.teleport.util.GuiUtil;
+import jiekie.teleport.util.SoundUtil;
 import org.bukkit.Location;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;

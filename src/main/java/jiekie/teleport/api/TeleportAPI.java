@@ -1,6 +1,6 @@
-package jiekie.api;
+package jiekie.teleport.api;
 
-import jiekie.manager.LocationManager;
+import jiekie.teleport.manager.LocationManager;
 import org.bukkit.Location;
 
 public class TeleportAPI {

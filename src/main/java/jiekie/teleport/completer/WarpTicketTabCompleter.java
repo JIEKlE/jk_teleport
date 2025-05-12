@@ -1,6 +1,6 @@
-package jiekie.completer;
+package jiekie.teleport.completer;
 
-import jiekie.TeleportPlugin;
+import jiekie.teleport.TeleportPlugin;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
