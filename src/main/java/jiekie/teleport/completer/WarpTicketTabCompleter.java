@@ -28,8 +28,12 @@ public class WarpTicketTabCompleter implements TabCompleter {
 
         String commandType = args[0];
         if(args.length == 2) {
+            if(commandType.equals("템플릿등록"))
+                return List.of("템플릿명");
+
             if((commandType.equals("등록") || commandType.equals("해제")) || commandType.equals("받기"))
                 return plugin.getLocationManager().getAllLocationNames();
+
             if(commandType.equals("템플릿제거"))
                 return plugin.getWarpTicketManager().getTemplateNames();
         }

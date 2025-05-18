@@ -33,6 +33,9 @@ public class TeleportTabCompleter implements TabCompleter {
 
         String commandType = args[0];
         if(args.length == 2) {
+            if(commandType.equals("장소설정"))
+                return List.of("장소명");
+
             if(commandType.equals("권한설정") || commandType.equals("장소제거") || commandType.equals("이동") || commandType.equals("정보"))
                 return plugin.getLocationManager().getAllLocationNames();
         }
